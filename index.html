@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Simple Calculator</title>
+	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> -->
+</head>
+<body ng-app="app" style="margin: 20px;">
+
+	<div class="row">
+		<div class="container-fluid">
+			<div class="page-header"><h2>Angular Simple Calculator</h2></div>
+			<div ng-controller="mainCtrl">
+				<form class="form-inline" ng-submit="addRow()">
+					<div class="form-group">
+						<input type="number" ng-model="values.bil1" ng-change="doCalculations(operator,values.bil1,values.bil2)" class="form-control input-sm">
+						<select ng-model="operator" ng-change="doCalculations(operator, values.bil1, values.bil2)" class="form-control input-sm">>
+				            <option value="+"/>+
+				            <option value="-"/>-
+				            <option value="*"/>*
+				            <option value="/"/>/				
+						</select>
+						<input type="number" ng-model="values.bil2" ng-change="doCalculations(operator, values.bil1, values.bil2)" class="form-control input-sm">
+						= {{ result }}
+						<input type="submit" class="btn btn-primary btn-flat" value="Add to List">
+					</div>
+				</form>
+					<div class="content-table">
+						<table class="table table-responsive table-hover">
+							<caption><h2 class="page-header">List of Result</h2></caption>
+							<thead>
+								<tr>
+									<th>Number 1</th>
+									<th>Operation</th>
+									<th>Number 2</th>
+									<th>Result</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="record in records">
+									<td>{{ record.bil1 }}</td>
+									<td>{{ record.operator }}</td>
+									<td>{{ record.bil2 }}</td>
+									<td>{{ record.result }}</td>
+									<td><button type="button" class="btn btn-danger btn-flat" ng-click="deleteRow($index)">Remove</button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="node_modules/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
+	<script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+
+		// load angular modules
+		var app = angular.module('app', []);
+
+		// controllers for main data
+		app.controller('mainCtrl', function ($scope, Calculator) { 
+			// scopes initialization 
+		    $scope.values = {
+		        bil1: 0,
+		        bil2: 0
+		    };
+
+		    // default operators input data
+		    $scope.operator = '+';
+		    
+		    // collect result output
+		    $scope.result = 0;
+
+		    // for save history input
+		    $scope.history = [];
+
+		    // for save records input
+		    $scope.records = [];
+		    // for add data input static to tables
+		    $scope.addRow = function()	{
+		    	$scope.records.push({ 'bil1': $scope.values.bil1, 'operator': $scope.operator, 'bil2': $scope.values.bil2, 'result': $scope.result });
+		    	$scope.values.bil1 = '';
+		    	$scope.operator = '';
+		    	$scope.values.bil2 = '';
+		    	$scope.result = '0';
+		    };		    
+		    // deleted record tables
+		    $scope.deleteRow = function(index) {
+		    	if ($scope.history.length === 10)
+		    		$scope.history.shift();
+		    	$scope.history.push($scope.records[index]);
+		    	$scope.records.splice(index, 1);
+		    };
+		    // for select operator dropdown
+		    $scope.doCalculations = function(operator, x, y){
+		        switch(operator){
+		            case '+': $scope.result = Calculator.add(x, y); break;
+		            case '-': $scope.result = Calculator.subtract(x, y); break;
+		            case '*': $scope.result = Calculator.multiply(x, y); break;
+		            case '/': $scope.result = Calculator.divide(x, y); break;
+		        }
+		    };
+
+		});
+
+		// function for calculate data input
+		app.service('Calculator', function(){
+
+		    this.add = function(x, y){
+		        return x + y;
+		    };
+		    
+		    this.subtract = function(x, y){
+		        return x - y;
+		    };
+		    
+		    this.multiply = function(x, y){
+		        return x * y;
+		    };
+		    
+		    this.divide = function(x, y){
+		        return x / y;
+		    };
+
+		});		
+	</script>
+</body>
+</html>

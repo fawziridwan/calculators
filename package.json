@@ -1,0 +1,26 @@
+{
+  "name": "calculators",
+  "version": "1.0.0",
+  "description": "test case angular js calculators",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "gogs@git.smooets.com:fawzi.r/simple-calculator.git"
+  },
+  "keywords": [
+    "angularJs-calculators"
+  ],
+  "author": "fawzi.r",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.6.8",
+    "bootstrap": "^3.3.7",
+    "jquery": "^1.9.1"
+  }
+}
